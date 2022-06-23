@@ -5,10 +5,9 @@ using UnityEngine;
 public class ComputeShaderTest : MonoBehaviour
 {
     public ComputeShader computeShader;
-
     public int textureSize = 256;
     public RenderTexture renderTexture;
-    
+
     // Start is called before the first frame update
     void Start()
     {   
@@ -23,6 +22,21 @@ public class ComputeShaderTest : MonoBehaviour
         computeShader.SetTexture (0, "Result", renderTexture);
         // Tell the shader how many threads to use
         computeShader.Dispatch (0, textureSize / 8, textureSize / 8, 1); 
+    }
+
+    void OnRenderImage(RenderTexture src, RenderTexture dest) 
+    {
+        if (renderTexture != null)
+        {
+            renderTexture = new RenderTexture(textureSize, textureSize, 24);
+            renderTexture.enableRandomWrite = true;
+            renderTexture.Create();
+        }
+
+        computeShader.SetTexture(0, "Result", renderTexture);
+        computeShader.SetFloat("Resolution", renderTexture.width);
+        computeShader.Dispatch(0, textureSize / 8, textureSize / 8, 1);
+        Graphics.Blit(renderTexture, dest);
     }
 
     // Update is called once per frame
