@@ -5,9 +5,15 @@ using UnityEngine;
 public class ComputeShaderTest : MonoBehaviour
 {
     public ComputeShader computeShader;
-    public int textureSize = 256;
+    public int texturePower = 3;
+    private int textureSize = 0;
+    private int texturePowerLastFrame;
     public RenderTexture renderTexture;
 
+    // Code from: https://stackoverflow.com/questions/11196700/math-pow-taking-an-integer-value
+    public static int TwoPowX(int power) {
+        return (1<<power);
+    }
     // Start is called before the first frame update
     void Start()
     {   
@@ -22,6 +28,9 @@ public class ComputeShaderTest : MonoBehaviour
         computeShader.SetTexture (0, "Result", renderTexture);
         // Tell the shader how many threads to use
         computeShader.Dispatch (0, textureSize / 8, textureSize / 8, 1); 
+
+        textureSize = TwoPowX(texturePower);
+        texturePowerLastFrame = texturePower;
     }
 
     void OnRenderImage(RenderTexture src, RenderTexture dest) 
@@ -30,11 +39,12 @@ public class ComputeShaderTest : MonoBehaviour
         {
             renderTexture = new RenderTexture(textureSize, textureSize, 24);
             renderTexture.enableRandomWrite = true;
+            renderTexture.filterMode = FilterMode.Point;
             renderTexture.Create();
         }
 
         computeShader.SetTexture(0, "Result", renderTexture);
-        computeShader.SetFloat("Resolution", renderTexture.width);
+        computeShader.SetFloat("Resolution", textureSize);
         computeShader.Dispatch(0, textureSize / 8, textureSize / 8, 1);
         Graphics.Blit(renderTexture, dest);
     }
@@ -42,6 +52,9 @@ public class ComputeShaderTest : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if(texturePowerLastFrame != texturePower) {
+            textureSize = TwoPowX(texturePower);
+        }
+        texturePowerLastFrame = texturePower;
     }
 }
