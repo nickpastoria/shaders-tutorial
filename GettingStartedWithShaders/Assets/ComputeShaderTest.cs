@@ -18,6 +18,7 @@ public class ComputeShaderTest : MonoBehaviour
     void Start()
     {   
         // Initialize new render texture
+        textureSize = TwoPowX(texturePower);
         renderTexture = new RenderTexture (textureSize, textureSize, 24);
         // Allow the texture to be changed by the compute shader
         renderTexture.enableRandomWrite = true;
@@ -29,7 +30,7 @@ public class ComputeShaderTest : MonoBehaviour
         // Tell the shader how many threads to use
         computeShader.Dispatch (0, textureSize / 8, textureSize / 8, 1); 
 
-        textureSize = TwoPowX(texturePower);
+        
         texturePowerLastFrame = texturePower;
     }
 
