@@ -4,58 +4,65 @@ using UnityEngine;
 
 public class ComputeShaderTest : MonoBehaviour
 {
-    public ComputeShader computeShader;
-    public int texturePower = 3;
-    private int textureSize = 0;
-    private int texturePowerLastFrame;
-    public RenderTexture renderTexture;
+    // public ComputeShader startingShader;
+    // public int texturePower = 3;
+    // private int textureSize = 0;
+    // private int texturePowerLastFrame;
+    // public RenderTexture renderTexture;
 
-    // Code from: https://stackoverflow.com/questions/11196700/math-pow-taking-an-integer-value
-    public static int TwoPowX(int power) {
-        return (1<<power);
-    }
-    // Start is called before the first frame update
-    void Start()
-    {   
-        // Initialize new render texture
-        textureSize = TwoPowX(texturePower);
-        renderTexture = new RenderTexture (textureSize, textureSize, 24);
-        // Allow the texture to be changed by the compute shader
-        renderTexture.enableRandomWrite = true;
-        // Create the texture itself
-        renderTexture.Create ();
+    // private struct Pixel {
+    //     public Vector3 position;
+    //     public Vector3 color;
+    //     public uint energy;
+    // }
 
-        // Tell the shader what thread to work on, what state to output, and what to draw onto
-        computeShader.SetTexture (0, "Result", renderTexture);
-        // Tell the shader how many threads to use
-        computeShader.Dispatch (0, textureSize / 8, textureSize / 8, 1); 
+    // // Code from: https://stackoverflow.com/questions/11196700/math-pow-taking-an-integer-value
+    // public static int TwoPowX(int power) {
+    //     return (1<<power);
+    // }
 
-        
-        texturePowerLastFrame = texturePower;
-    }
+    // private void generatePixels(ref Pixel[] pixels) {
+    //     Pixel temp;
+    //     temp.position = new Vector3(0, 0, 0);
+    //     temp.color = new Vector3(0, 0, 0);
+    //     temp.energy = 10;
+    //     pixels = new Pixel[] { temp };
+    // }     
 
-    void OnRenderImage(RenderTexture src, RenderTexture dest) 
-    {
-        if (renderTexture != null)
-        {
-            renderTexture = new RenderTexture(textureSize, textureSize, 24);
-            renderTexture.enableRandomWrite = true;
-            renderTexture.filterMode = FilterMode.Point;
-            renderTexture.Create();
-        }
+    // // Start is called before the first frame update
+    // void Start()
+    // {   
+    //     int vector3Size = sizeof(float) * 3;
+    //     int uintSize = sizeof(uint);
+    //     int totalSize = vector3Size * 2 + uintSize;
+    //     Pixel[] _pixels;
+    //     // Initialize new render texture
+    //     textureSize = TwoPowX(texturePower);
+    //     renderTexture = new RenderTexture (textureSize, textureSize, 24);
+    //     // Allow the texture to be changed by the compute shader
+    //     renderTexture.enableRandomWrite = true;
+    //     // Create the texture itself
+    //     renderTexture.Create ();
 
-        computeShader.SetTexture(0, "Result", renderTexture);
-        computeShader.SetFloat("Resolution", textureSize);
-        computeShader.Dispatch(0, textureSize / 8, textureSize / 8, 1);
-        Graphics.Blit(renderTexture, dest);
-    }
+    //     //Create Buffer Array to send to compute shader
+    //     //generatePixels(ref _pixels);
+    //     //ComputeBuffer pixelBuffer = new ComputeBuffer(_pixels.Length, totalSize);
+    //     //pixelBuffer.SetData(_pixels);
+    //     startingShader.SetBuffer(0, "Pixels", pixelBuffer);
 
-    // Update is called once per frame
-    void Update()
-    {
-        if(texturePowerLastFrame != texturePower) {
-            textureSize = TwoPowX(texturePower);
-        }
-        texturePowerLastFrame = texturePower;
-    }
+    //     // Tell the shader what thread to work on, what state to output, and what to draw onto
+    //     startingShader.SetTexture (0, "Result", renderTexture);
+    //     // Tell the shader how many threads to use
+    //     startingShader.Dispatch (0, textureSize / 8, textureSize / 8, 1); 
+    // }
+
+    // void OnRenderImage(RenderTexture src, RenderTexture dest) 
+    // {
+
+    // }
+
+    // // Update is called once per frame
+    // void Update()
+    // {
+    // }
 }
