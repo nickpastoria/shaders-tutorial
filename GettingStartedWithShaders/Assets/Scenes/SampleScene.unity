@@ -311,9 +311,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 963194225}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c9ab38c15e5e1b847abf70b64f056e35, type: 3}
+  m_Script: {fileID: 11500000, guid: 5b9445f7c7a0e3046b16bf85129944ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  computeShader: {fileID: 7200000, guid: 35b5a7fc4540b964ba6bfa021d8a7af0, type: 3}
-  textureSize: 3
-  renderTexture: {fileID: 0}
+  generatePixels: {fileID: 7200000, guid: ae534e8dbfff6c341af90cc077611463, type: 3}
+  drawTexture: {fileID: 0}
+  textureSizeX: 1280
+  textureSizeY: 720
+  filterMode: 0

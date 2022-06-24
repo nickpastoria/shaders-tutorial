@@ -16,32 +16,37 @@ public class PixelDrawing : MonoBehaviour
     public int textureSizeY = 720;
     public FilterMode filterMode = FilterMode.Point;
 
-    //Define struct for pixel data
-    private struct Pixel {
-        public Vector2 position;
-        public Vector3 color;
-    }
-
     ComputeBuffer pixelBuffer;
 
     // Start is called before the first frame update
     void Start()
     {
         CreateRenderTexture(ref drawTexture, textureSizeX, textureSizeY, filterMode);
+        ReDrawTexture();
     }
 
     void OnRenderImage(RenderTexture src, RenderTexture dest)
     {
         // Set up compute shader
+        Graphics.Blit(drawTexture, dest);
+    }
+
+    void ReDrawTexture() {
         generatePixels.SetTexture(0, "Result", drawTexture);
         generatePixels.Dispatch(0, textureSizeX / 8, textureSizeY / 8, 1);
-        Graphics.Blit(drawTexture, dest);
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if(Input.GetMouseButton(0)) {
+            ReDrawTexture();
+            int mouseTexturePosX = (int)(((float)Input.mousePosition.x / (float)Screen.width) * textureSizeX);
+            int mouseTexturePosY = (int)(((float)Input.mousePosition.y / (float)Screen.height) * textureSizeY);
+            generatePixels.SetInt("MouseX", mouseTexturePosX);
+            generatePixels.SetInt("MouseY", mouseTexturePosY);
+            //Debug.Log("Mouse Clicked at (" + mouseTexturePosX + ", " + mouseTexturePosY + ")");
+        }
     }
 
     void CreateRenderTexture(ref RenderTexture renderTexture, int textureWidth, int textureHeight, FilterMode filterMode) {

@@ -5,19 +5,25 @@
 // with cs.SetTexture
 RWTexture2D<float4> Result;
 
-struct Pixel
-{
-    float2 Position;
-    float3 Color;
-};
-
-RWStructuredBuffer<Pixel> PixelBuffer;
-int PixelBufferSize = 0;
+int MouseX = -1;
+int MouseY = -1;
 
 [numthreads(8,8,1)]
 void CSMain (uint3 id : SV_DispatchThreadID)
 {
     // TODO: insert actual code here!
+    if(MouseX < 0 || MouseY < 0)
+    {
+        Result[id.xy] = 0;
+        return;
+    }
 
-    Result[id.xy] = float4(id.x/((float)1024),0,0,0);
+    if(id.x == MouseX && id.y == MouseY)
+    {
+        Result[id.xy] = float4(1.0f, 1.0f, 1.0f, 1.0f);
+    }
+    else
+    {
+        Result[id.xy] = float4(0.0f, 0.0f, 0.0f, 1.0f);
+    }
 }
