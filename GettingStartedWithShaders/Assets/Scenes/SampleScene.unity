@@ -320,4 +320,5 @@ MonoBehaviour:
   textureSizeX: 32
   textureSizeY: 18
   filterMode: 0
-  FrameRate: 10
+  FrameRate: 60
+  DiffuseEntropy: 0.001
