@@ -315,7 +315,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   generatePixels: {fileID: 7200000, guid: ae534e8dbfff6c341af90cc077611463, type: 3}
+  frameEffectShader: {fileID: 7200000, guid: 52e3225c320385d4ebd2ae06f2cb6bf1, type: 3}
   drawTexture: {fileID: 0}
-  textureSizeX: 1280
-  textureSizeY: 720
+  textureSizeX: 32
+  textureSizeY: 18
   filterMode: 0
+  FrameRate: 10

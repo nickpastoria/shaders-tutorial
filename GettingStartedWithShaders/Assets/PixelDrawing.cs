@@ -8,6 +8,7 @@ public class PixelDrawing : MonoBehaviour
     // Set up compute shader scripts and texture
     [Header("Compute Shaders")]
     public ComputeShader generatePixels;
+    public ComputeShader frameEffectShader;
     public RenderTexture drawTexture;
 
     // Set up texture size
@@ -15,6 +16,7 @@ public class PixelDrawing : MonoBehaviour
     public int textureSizeX = 1280;
     public int textureSizeY = 720;
     public FilterMode filterMode = FilterMode.Point;
+    public int FrameRate = 10;
 
     ComputeBuffer pixelBuffer;
 
@@ -39,12 +41,19 @@ public class PixelDrawing : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Application.targetFrameRate = FrameRate;
+        if(frameEffectShader != null) {
+            frameEffectShader.SetInt("Width", textureSizeX);
+            frameEffectShader.SetInt("Height", textureSizeY);
+            frameEffectShader.SetTexture(0, "Result", drawTexture);
+            frameEffectShader.Dispatch(0, textureSizeX / 8, textureSizeY / 8, 1);
+        }
         if(Input.GetMouseButton(0)) {
-            ReDrawTexture();
             int mouseTexturePosX = (int)(((float)Input.mousePosition.x / (float)Screen.width) * textureSizeX);
             int mouseTexturePosY = (int)(((float)Input.mousePosition.y / (float)Screen.height) * textureSizeY);
             generatePixels.SetInt("MouseX", mouseTexturePosX);
             generatePixels.SetInt("MouseY", mouseTexturePosY);
+            ReDrawTexture();
             //Debug.Log("Mouse Clicked at (" + mouseTexturePosX + ", " + mouseTexturePosY + ")");
         }
     }

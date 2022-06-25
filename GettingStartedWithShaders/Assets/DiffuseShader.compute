@@ -4,26 +4,20 @@
 // Create a RenderTexture with enableRandomWrite flag and set it
 // with cs.SetTexture
 RWTexture2D<float4> Result;
-
-int MouseX = -1;
-int MouseY = -1;
+int Width;
+int Height;
 
 [numthreads(8,8,1)]
 void CSMain (uint3 id : SV_DispatchThreadID)
 {
+    float4 sum;
     // TODO: insert actual code here!
-    if(MouseX < 0 || MouseY < 0)
-    {
-        Result[id.xy] = 0;
-        return;
+    for(uint i = 0; i < 3; i++) {
+        for(uint j = 0; j < 3; j++) {
+            if(id.x != 0 || id.y != 0 || id.x != Width || id.y != Height) sum = sum + Result[uint2(id.x + i - 1, id.y + j - 1)];
+        }
     }
-
-    if(id.x == MouseX && id.y == MouseY)
-    {
-        Result[id.xy] = float4(1.0f, 1.0f, 1.0f, 1.0f);
-    }
-    else
-    {
-        return;
-    }
+    sum = sum / 9.0f;
+    Result[id.xy] = sum;
+    Result[id.xy] -= 0.001f;
 }
