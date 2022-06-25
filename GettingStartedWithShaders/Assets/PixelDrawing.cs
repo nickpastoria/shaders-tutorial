@@ -17,6 +17,7 @@ public class PixelDrawing : MonoBehaviour
     public int textureSizeY = 720;
     public FilterMode filterMode = FilterMode.Point;
     public int FrameRate = 10;
+    public float DiffuseEntropy = 0.001f;
 
     ComputeBuffer pixelBuffer;
 
@@ -45,6 +46,7 @@ public class PixelDrawing : MonoBehaviour
         if(frameEffectShader != null) {
             frameEffectShader.SetInt("Width", textureSizeX);
             frameEffectShader.SetInt("Height", textureSizeY);
+            frameEffectShader.SetFloat("Entropy", DiffuseEntropy);
             frameEffectShader.SetTexture(0, "Result", drawTexture);
             frameEffectShader.Dispatch(0, textureSizeX / 8, textureSizeY / 8, 1);
         }

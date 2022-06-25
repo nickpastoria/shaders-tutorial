@@ -6,6 +6,7 @@
 RWTexture2D<float4> Result;
 int Width;
 int Height;
+float Entropy;
 
 [numthreads(8,8,1)]
 void CSMain (uint3 id : SV_DispatchThreadID)
@@ -19,5 +20,5 @@ void CSMain (uint3 id : SV_DispatchThreadID)
     }
     sum = sum / 9.0f;
     Result[id.xy] = sum;
-    Result[id.xy] -= 0.001f;
+    Result[id.xy] -= Entropy;
 }
